@@ -1,0 +1,23 @@
+{
+  "schema_version": 2,
+  "mod_info": {
+    "name": "AmnesiaHeadTracking",
+    "version": "0.0.0",
+    "game_id": "amnesia-the-dark-descent"
+  },
+  "strategy": "AsiLoader",
+  "delivery_mode": "install_cmd",
+
+  "loader": {
+    "archives": [],
+    "detect": ["wininet.dll"],
+    "seed": []
+  },
+
+  "files": [
+    { "source": "plugins/AmnesiaHeadTracking.asi", "target": "AmnesiaHeadTracking.asi" }
+  ],
+
+  "runtime_requirements": [],
+  "dependencies": []
+}

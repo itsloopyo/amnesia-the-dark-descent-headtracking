@@ -1,0 +1,42 @@
+# Build output
+build/
+bin/
+obj/
+dist/
+release/
+*.user
+*.suo
+.vs/
+.vscode/
+.idea/
+
+# Install state marker (written into the game dir at runtime)
+.headtracking-state.json
+
+# Game DLLs referenced at build time (never committed)
+libs/
+
+# Tooling / local-only (per AGENTS.md)
+.claude/
+.lab/
+.pixi/
+AGENTS.md
+CLAUDE.md
+*.mcp.json
+.mcp.json
+
+# Logs
+*.log
+
+# Game-derived material - NEVER commit. This repo ships no game code, assets,
+# executables, or reverse-engineering databases. See THIRD-PARTY-NOTICES.md.
+*.exe
+!vendor/**/*.exe
+*.gpr
+*.rep/
+*.gzf
+ghidra*/
+Amnesia*.exe
+*_Data/
+Managed/
+*.dmp

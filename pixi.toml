@@ -1,0 +1,59 @@
+[workspace]
+name = "amnesia-head-tracking"
+version = "0.0.0"
+description = "6DOF head tracking mod for Amnesia: The Dark Descent (HPL2) using CameraUnlock shared library"
+license = "MIT"
+channels = ["conda-forge"]
+platforms = ["win-64"]
+
+[tasks]
+# Update the shared cameraunlock-core submodule to its remote tip
+sync = "git submodule update --remote cameraunlock-core"
+
+# Setup CMake build (x86 / Win32 - Amnesia.exe is 32-bit HPL2)
+# No -G: let CMake auto-detect the installed Visual Studio generator. Pinning
+# "Visual Studio 17 2022" broke on CI once the windows runner image moved to
+# VS 2026 (VS 17 absent); auto-detect picks whatever VS the machine has.
+setup = { cmd = """
+    powershell -Command "if (-not (Test-Path 'build')) { cmake -B build -A Win32 } else { Write-Host 'Build directory exists, skipping setup' -ForegroundColor Yellow }"
+""" }
+
+# Build debug
+build = { cmd = "cmake --build build --config Debug", depends-on = ["setup"] }
+
+# Build release
+build-release = { cmd = "cmake --build build --config Release", depends-on = ["setup"] }
+
+# Build and deploy the .asi + ini next to Amnesia.exe (release)
+install = { cmd = "powershell -ExecutionPolicy Bypass -File scripts/deploy.ps1 Release", depends-on = ["build-release"] }
+
+# Remove the mod from the game directory
+uninstall = "scripts\\uninstall.cmd"
+
+# Bump vendored Ultimate ASI Loader to latest upstream within the pinned range.
+# Manual; commit the result. CI does not run this.
+update-deps = { cmd = "powershell -ExecutionPolicy Bypass -File scripts/update-deps.ps1" }
+
+# Strip the third-party DLLs the upstream x86 loader embeds as resources
+# (binkw32.dll, wndmode.dll, vorbisfile.dll). update-deps runs this already;
+# the task exists for a loader copied in by hand.
+strip-loader = { cmd = "powershell -ExecutionPolicy Bypass -File scripts/strip-loader-payload.ps1 -Path vendor/ultimate-asi-loader/dinput8.dll" }
+
+# Package release ZIPs
+package = { cmd = "powershell -ExecutionPolicy Bypass -File scripts/package-release.ps1", depends-on = ["build-release"] }
+
+# Clean build artifacts
+clean = { cmd = """
+    powershell -Command "if (Test-Path 'build') { Remove-Item 'build' -Recurse -Force }; Write-Host 'Build artifacts cleaned' -ForegroundColor Green"
+""" }
+
+# Full clean including release output
+clean-all = { cmd = """
+    powershell -Command "if (Test-Path 'build') { Remove-Item 'build' -Recurse -Force }; if (Test-Path 'release') { Remove-Item 'release' -Recurse -Force }; Write-Host 'All build artifacts cleaned' -ForegroundColor Green"
+""" }
+
+# Full release workflow (validate, version bump, tag, push)
+release = { cmd = "powershell -ExecutionPolicy Bypass -File scripts/release.ps1" }
+
+[dependencies]
+# No pixi dependencies - uses system CMake + Visual Studio

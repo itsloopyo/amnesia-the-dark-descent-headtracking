@@ -1,0 +1,42 @@
+@echo off
+:: ============================================
+:: Amnesia: The Dark Descent - Uninstall
+:: ============================================
+:: Thin wrapper - uninstall body lives in cameraunlock-core/scripts/uninstall-body.cmd.
+
+:: --- CONFIG BLOCK ---
+set "GAME_ID=amnesia-the-dark-descent"
+set "MOD_DISPLAY_NAME=Amnesia Head Tracking"
+set "MOD_DLLS=AmnesiaHeadTracking.asi HeadTracking.ini HeadTracking.log HeadTracking.prev.log"
+set "MOD_INTERNAL_NAME=AmnesiaHeadTracking"
+set "STATE_FILE=.headtracking-state.json"
+set "FRAMEWORK_TYPE=ASILoader"
+set "LEGACY_DLLS=AmnesiaHeadTracking.log AmnesiaHeadTracking.prev.log"
+
+:: --- Loader-specific config (leave the ones that don't apply blank) ---
+set "MANAGED_SUBFOLDER="
+set "ASSEMBLY_DLL="
+set "MANAGED_EXTRAS="
+:: ASILoader: filename the ASI DLL was renamed to.
+set "ASI_LOADER_NAME=wininet.dll"
+:: --- END CONFIG BLOCK ---
+
+:: Pin delayed expansion off before `%*` is expanded on the `call` below.
+:: Under `cmd /V:ON`, or with DelayedExpansion=1 in
+:: HKCU\Software\Microsoft\Command Processor, cmd.exe eats a `!` out of the
+:: expanded line, and a real game path like C:\Games\Oh! My Game reaches the
+:: body already mangled. The body pins expansion off at its own outer scope
+:: too, but that is one `call` too late to save the argument it was handed.
+setlocal disabledelayedexpansion
+
+set "WRAPPER_DIR=%~dp0"
+set "_BODY=%WRAPPER_DIR%shared\uninstall-body.cmd"
+if not exist "%_BODY%" set "_BODY=%WRAPPER_DIR%..\cameraunlock-core\scripts\uninstall-body.cmd"
+if not exist "%_BODY%" (
+    echo ERROR: uninstall-body.cmd not found in shared\ or ..\cameraunlock-core\scripts\.
+    echo If this is a release ZIP, re-download it from GitHub ^(corrupt installer^).
+    echo If this is the dev tree, run: git submodule update --init --recursive
+    exit /b 1
+)
+call "%_BODY%" %*
+exit /b %errorlevel%
