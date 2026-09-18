@@ -7,7 +7,9 @@
 :: --- CONFIG BLOCK ---
 set "GAME_ID=amnesia-the-dark-descent"
 set "MOD_DISPLAY_NAME=Amnesia Head Tracking"
-set "MOD_DLLS=AmnesiaHeadTracking.asi HeadTracking.ini"
+set "MOD_DLLS=AmnesiaHeadTracking.asi"
+:: Copied only when absent, so reinstalling keeps the settings the user tuned.
+set "MOD_SEED_FILES=HeadTracking.ini"
 set "MOD_INTERNAL_NAME=AmnesiaHeadTracking"
 set "MOD_VERSION=0.0.0"
 set "STATE_FILE=.headtracking-state.json"
