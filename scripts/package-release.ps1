@@ -69,9 +69,11 @@ foreach ($s in @("install.cmd", "uninstall.cmd")) {
 }
 
 # Stamp the launcher manifest with the real release version and place it at the
-# installer ZIP root. The launcher reads this file (delivery_mode is install_cmd,
-# so install.cmd still drives the actual install - the manifest is the metadata
-# lopari ingests for detection, audit, and future native deployment).
+# installer ZIP root. The launcher deploys natively from this file; install.cmd
+# ships alongside for standalone installs and for removing an older script install.
+# loader.seed carries a base64 copy of config/HeadTracking.ini, so drift between
+# the two fails the build here rather than shipping stale defaults.
+Assert-ManifestSeedsMatchShipped -ManifestPath $manifestPath -ProjectRoot $projectDir
 $manifest = Get-Content $manifestPath -Raw | ConvertFrom-Json
 $manifest.mod_info.version = $version
 $manifest | ConvertTo-Json -Depth 10 | Set-Content -Path (Join-Path $ghStaging "launcher-manifest.json") -Encoding utf8
