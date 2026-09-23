@@ -8,7 +8,7 @@ An unofficial head tracking mod for Amnesia: The Dark Descent that moves the vie
 
 - **Decoupled look and aim** - head tracking moves the view; the mouse still controls where you turn and what you reach for
 - **6DOF tracking** - yaw, pitch and roll plus positional lean, peek and duck
-- **Works with any OpenTrack-compatible source** - webcam, phone app, or anything else that sends the OpenTrack UDP protocol
+- **Works with any OpenTrack compatible tracker** - free options available for PC, iOS and Android
 
 ## Requirements
 
@@ -17,6 +17,13 @@ An unofficial head tracking mod for Amnesia: The Dark Descent that moves the vie
 - Windows 10 or 11, 64-bit. The game is a 32-bit executable and the mod is built to match it.
 
 ## Installation
+
+### Lopari
+
+Download [Lopari](https://lopari.app), choose **Amnesia: The Dark Descent**, and click
+**Play with head tracking**.
+
+### Standalone Installer
 
 1. Download the latest `AmnesiaHeadTracking-vX.Y.Z-installer.zip` from [Releases](https://github.com/itsloopyo/amnesia-the-dark-descent-headtracking/releases).
 2. Extract it anywhere.
