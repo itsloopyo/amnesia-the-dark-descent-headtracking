@@ -16,6 +16,10 @@ set "STATE_FILE=.headtracking-state.json"
 set "FRAMEWORK_TYPE=ASILoader"
 set "ASI_LOADER_NAME=wininet.dll"
 set "MOD_CONTROLS=Controls:&echo   End - Toggle   PageUp - Cycle mode"
+:: Not used by this mod. Set blank so a value another mod's wrapper left in
+:: the same console does not reach the body.
+set "ASI_SUBDIR="
+set "ASI_LOADER_VERSION="
 :: ASI_LOADER_NAME is the filename the ASI DLL is renamed to. Amnesia.exe
 :: imports wininet.dll (but not winmm/dinput8/version), so the loader is
 :: dropped in as wininet.dll. vendor/ultimate-asi-loader/dinput8.dll is the
